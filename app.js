@@ -7,6 +7,7 @@ connectDB();
 
 // routes
 const claimRouter = require('./routes/claim');
+const userRouter = require('./routes/user');
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(helmet());
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
+app.use('/api/v1/user', userRouter);
 app.use('/api/v1/claim', claimRouter);
 
 app.get('/', (req, res) => {

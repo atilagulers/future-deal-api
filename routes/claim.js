@@ -6,10 +6,19 @@ const {tryCatch} = require('../utils');
 
 //GET /claim/:claimId
 
-router.get('/:claimId', (req, res) => {
-  const claimId = req.params.claimId;
-  res.status(StatusCodes.OK).send(`GET THIS CLAIM ${claimId}`);
-});
+router.get(
+  '/:claimId',
+  tryCatch(async (req, res) => {
+    const claimId = req.params.claimId;
+
+    const data = await Claim.findById(claimId);
+
+    res.status(StatusCodes.OK).json({
+      status: 'success',
+      data,
+    });
+  })
+);
 
 //POST /claim
 
