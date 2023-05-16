@@ -3,8 +3,9 @@ require('dotenv').config();
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
+var cookieSession = require('cookie-session');
+const cookieParser = require('cookie-parser'); // parse cookie header
 const connectDB = require('./db/connect');
-connectDB();
 
 //auth
 require('./middlewares/passportSetup');
@@ -18,10 +19,26 @@ const passport = require('passport');
 
 const app = express();
 
+connectDB();
+
 app.use(helmet());
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: 'http://localhost:3001', // allow to server to accept request from different origin
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true, // allow session cookie from browser to pass through
+  })
+);
+
+app.use(
+  cookieSession({
+    name: 'session',
+    keys: [process.env.COOKIE_KEY],
+    maxAge: 24 * 60 * 60 * 100,
+  })
+);
 
 app.use(
   session({
@@ -30,6 +47,8 @@ app.use(
     saveUninitialized: false,
   })
 );
+
+app.use(cookieParser());
 
 app.use(passport.initialize());
 app.use(passport.session());
