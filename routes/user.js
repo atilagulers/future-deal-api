@@ -2,9 +2,25 @@ const express = require('express');
 const router = express.Router();
 const {tryCatch} = require('../utils');
 const User = require('../models/User');
+const Claim = require('../models/Claim');
 const {StatusCodes} = require('http-status-codes');
 
 //GET /user/:userId
+
+router.get(
+  '/:userId/claims',
+  tryCatch(async (req, res) => {
+    const userId = req.params.userId;
+    const claims = await Claim.find({'claimCreator.user': userId});
+
+    res.status(StatusCodes.OK).json({
+      success: true,
+      data: claims,
+    });
+  })
+);
+
+//GET /user/:userId/claims
 
 router.get(
   '/:userId',
@@ -13,7 +29,7 @@ router.get(
     const data = await User.findById(userId);
 
     res.status(StatusCodes.OK).json({
-      status: 'success',
+      success: true,
       data,
     });
   })

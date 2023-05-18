@@ -2,12 +2,9 @@ const mongoose = require('mongoose');
 
 const claimSchema = new mongoose.Schema({
   claimCreator: {
-    name: {
-      type: String,
-      required: true,
-    },
-    email: {
-      type: String,
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
       required: true,
     },
     comment: {
@@ -15,20 +12,19 @@ const claimSchema = new mongoose.Schema({
       required: true,
     },
   },
-  claimChallenger: {
-    name: {
-      type: String,
-      required: true,
+  claimChallenger: [
+    {
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+      },
+      comment: {
+        type: String,
+        required: true,
+      },
     },
-    email: {
-      type: String,
-      required: true,
-    },
-    comment: {
-      type: String,
-      required: true,
-    },
-  },
+  ],
   topic: {
     type: String,
     required: true,

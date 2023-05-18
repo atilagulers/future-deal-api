@@ -42,13 +42,14 @@ app.use(
 
 app.use(
   session({
-    secret: process.env.GOOGLE_CLIENT_SECRET,
+    secret: 'session',
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      maxAge: 60 * 60 * 1000,
+    },
   })
 );
-
-app.use(cookieParser());
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -62,7 +63,6 @@ app.get('/', (req, res) => {
 });
 
 const authCheck = (req, res, next) => {
-  console.log('hererer');
   if (!req.user) {
     res.status(401).json({
       authenticated: false,

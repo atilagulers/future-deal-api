@@ -5,7 +5,6 @@ const Claim = require('../models/Claim');
 const {tryCatch} = require('../utils');
 
 //GET /claim/:claimId
-
 router.get(
   '/:claimId',
   tryCatch(async (req, res) => {
@@ -14,7 +13,7 @@ router.get(
     const data = await Claim.findById(claimId);
 
     res.status(StatusCodes.OK).json({
-      status: 'success',
+      success: true,
       data,
     });
   })
@@ -30,7 +29,7 @@ router.post(
     const data = await Claim.create(claim);
 
     res.status(StatusCodes.CREATED).json({
-      status: 'success',
+      success: true,
       data,
     });
   })
